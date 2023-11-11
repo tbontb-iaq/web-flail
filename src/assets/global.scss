@@ -1,0 +1,16 @@
+@import url('./material-symbols.scss');
+
+html {
+  overflow: hidden;
+  user-select: none;
+
+  > body {
+    margin: 0;
+  }
+
+  &,
+  & > body,
+  & > body > #root {
+    @include max-size;
+  }
+}

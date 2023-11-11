@@ -1,0 +1,10 @@
+.container {
+  @include max-size;
+  @include center;
+  font-size: xx-large;
+
+  > :global(.material-button) {
+    font-size: inherit;
+    padding: 0.5em 1em;
+  }
+}
