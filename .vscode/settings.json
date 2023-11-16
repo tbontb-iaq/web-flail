@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "public": true,
+    "prettier.config.mjs": true,
+    "tsconfig.node.json": true,
+    "src/vite-env.d.ts": true
+  }
+}

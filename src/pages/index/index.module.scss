@@ -1,10 +1,53 @@
 .container {
   @include max-size;
-  @include center;
-  font-size: xx-large;
+  position: relative;
 
-  > :global(.material-button) {
-    font-size: inherit;
-    padding: 0.5em 1em;
+  > .player,
+  > .hammer,
+  > .enemy > div {
+    width: calc(var(--size) * 2px);
+    top: calc(var(--y) * 1px);
+    left: calc(var(--x) * 1px);
+    position: absolute;
+    aspect-ratio: 1;
+    background: black;
+    border-radius: 100%;
+    translate: -50% -50%;
+    animation: shadow 1.5s infinite alternate ease-out;
+
+    @keyframes shadow {
+      to {
+        box-shadow: 0 0 10px 2px black;
+      }
+    }
+  }
+
+  > .player {
+    background: white;
+    box-shadow:
+      0 0 10px black,
+      inset 0 0 10px lightgray;
+  }
+
+  > .hammer {
+    box-shadow: 0 0 10px black;
+  }
+
+  > .enemy {
+    @include max-size;
+    > div {
+      border: 1px white solid;
+      animation:
+        show 1s ease,
+        shadow 1.5s infinite alternate ease-out;
+      @keyframes show {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
