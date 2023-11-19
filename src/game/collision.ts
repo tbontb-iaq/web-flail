@@ -16,11 +16,7 @@ class CollisionSystem extends System<[CollisionComponent, PosComponent]> {
   }
 
   update(
-    iterator: Generator<
-      [CollisionComponent, PosComponent, Entity],
-      void,
-      unknown
-    >,
+    iterator: Generator<[CollisionComponent, PosComponent, Entity], void>,
   ): void | (() => void) {
     for (const [{ callbacks }, pos, entity] of iterator) {
       callbacks.forEach(([target, callback]) => {

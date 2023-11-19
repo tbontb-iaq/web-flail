@@ -7,7 +7,7 @@ import {
 } from './core'
 
 class EnemyComponent extends Component {
-  readonly v: number
+  v: number
   constructor(
     public readonly player: Entity,
     { v = 1 }: Partial<Omit<EnemyComponent, 'player'>> = {},

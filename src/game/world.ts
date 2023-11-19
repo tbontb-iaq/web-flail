@@ -8,6 +8,7 @@ import {
   Component,
 } from '.'
 import { CollisionSystem } from './collision'
+import { HealthSystem } from './health'
 
 class World {
   entities = new Set<Entity>()
@@ -22,7 +23,7 @@ class World {
   ) {}
 
   createEntity(name = '', ...components: Component[]) {
-    const entity = new Entity(name, ...components)
+    const entity = new Entity(this, name, ...components)
     this.entities.add(entity)
     return entity
   }
@@ -42,8 +43,9 @@ const world = new World({
   spring: new SpringSystem(),
   enemy: new EnemySystem(),
   collision: new CollisionSystem(),
+  health: new HealthSystem(),
   physic: new PhysicSystem(1 / 6),
   render: new RenderSystem(),
 })
 
-export { world }
+export { world, World }

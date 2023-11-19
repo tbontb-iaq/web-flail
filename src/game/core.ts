@@ -1,6 +1,11 @@
 import { Class, ClassArray, InstanceArray, UndefinedArray } from './types'
+import { World } from './world'
 
-class Component {}
+class Component {
+  destroy() {
+    return
+  }
+}
 
 abstract class System<C extends Component[] = Component[]> {
   *query(iterator: IterableIterator<Entity>) {
@@ -21,6 +26,7 @@ class Entity {
   private readonly components = new Map<Class<Component>, Component>()
 
   constructor(
+    private readonly world: World,
     public readonly name = '',
     ...components: Component[]
   ) {
@@ -34,13 +40,22 @@ class Entity {
     return this
   }
 
-  has(...Components: Class<Component>[]) {
-    return Components.every(Component => this.components.has(Component))
+  remove(...Components: Class<Component>[]) {
+    Components.forEach(Component => {
+      this.components.get(Component)?.destroy()
+      this.components.delete(Component)
+    })
+    return this
   }
 
-  remove(...Components: Class<Component>[]) {
-    Components.forEach(Component => this.components.delete(Component))
+  destroy() {
+    for (const c of this.components.values()) c.destroy()
+    this.world.entities.delete(this)
     return this
+  }
+
+  has(...Components: Class<Component>[]) {
+    return Components.every(Component => this.components.has(Component))
   }
 
   get<CA extends Class<Component>[]>(...Components: CA) {
@@ -66,10 +81,26 @@ class PosComponent extends Component implements Coord {
 }
 
 class ElementComponent extends Component {
+  destroy(): void {
+    this.element.remove()
+  }
+
+  public readonly element: HTMLElement
+  constructor(element: HTMLElement)
+  constructor(config?: { className?: string | string[]; id?: string })
   constructor(
-    public readonly element: HTMLElement = document.createElement('div'),
+    arg1: HTMLElement | { className?: string | string[]; id?: string },
   ) {
     super()
+    if (arg1 instanceof HTMLElement) this.element = arg1
+    else {
+      this.element = document.createElement('div')
+      const { className, id } = arg1 ?? {}
+      if (className)
+        if (Array.isArray(className)) this.element.classList.add(...className)
+        else this.element.classList.add(className)
+      if (id) this.element.id = id
+    }
   }
 }
 
